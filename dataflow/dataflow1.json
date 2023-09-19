@@ -79,14 +79,17 @@
 				"     ignoreNoFilesFound: false) ~> regiondimcsv",
 				"weathermetricscsv sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     emptyLinesAsHeader: 1,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> weathermetricscsvCleaned",
 				"datedimcsv sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     emptyLinesAsHeader: 1,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> datedimcsvCleaned",
 				"regiondimcsv sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     emptyLinesAsHeader: 1,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> regiondimcsvCleaned"
 			]
