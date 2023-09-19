@@ -1,0 +1,9 @@
+{
+	"name": "bentalebSaadADF",
+	"location": "francecentral",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "76edad99-713b-4bf9-9475-1fd3f923ac3c",
+		"tenantId": "a2e466aa-4f86-4545-b5b8-97da7c8febf3"
+	}
+}

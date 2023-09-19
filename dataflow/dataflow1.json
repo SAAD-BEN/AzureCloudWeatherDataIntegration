@@ -1,0 +1,95 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "weathermetricscsv",
+						"type": "DatasetReference"
+					},
+					"name": "weathermetricscsv"
+				},
+				{
+					"dataset": {
+						"referenceName": "datedimcsv",
+						"type": "DatasetReference"
+					},
+					"name": "datedimcsv"
+				},
+				{
+					"dataset": {
+						"referenceName": "regiondimcsv",
+						"type": "DatasetReference"
+					},
+					"name": "regiondimcsv"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "weathermetricscsvCLeaned",
+						"type": "DatasetReference"
+					},
+					"name": "weathermetricscsvCleaned"
+				},
+				{
+					"dataset": {
+						"referenceName": "datedimcsvCleaned",
+						"type": "DatasetReference"
+					},
+					"name": "datedimcsvCleaned"
+				},
+				{
+					"dataset": {
+						"referenceName": "regiondimcsvCleaned",
+						"type": "DatasetReference"
+					},
+					"name": "regiondimcsvCleaned"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          DateID as integer,",
+				"          RegionID as integer,",
+				"          AverageTemperature as integer,",
+				"          Humidity as integer,",
+				"          WindSpeed as integer,",
+				"          Rainfall as integer,",
+				"          SunshineHours as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> weathermetricscsv",
+				"source(output(",
+				"          DateID as integer,",
+				"          Date as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> datedimcsv",
+				"source(output(",
+				"          RegionID as integer,",
+				"          RegionName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> regiondimcsv",
+				"weathermetricscsv sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> weathermetricscsvCleaned",
+				"datedimcsv sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> datedimcsvCleaned",
+				"regiondimcsv sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> regiondimcsvCleaned"
+			]
+		}
+	}
+}
