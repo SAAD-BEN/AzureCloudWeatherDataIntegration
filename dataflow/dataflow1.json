@@ -28,23 +28,23 @@
 			],
 			"sinks": [
 				{
-					"dataset": {
-						"referenceName": "weathermetricscsvCLeaned",
-						"type": "DatasetReference"
+					"linkedService": {
+						"referenceName": "bentalebAzureBlobStorage",
+						"type": "LinkedServiceReference"
 					},
 					"name": "weathermetricscsvCleaned"
 				},
 				{
-					"dataset": {
-						"referenceName": "datedimcsvCleaned",
-						"type": "DatasetReference"
+					"linkedService": {
+						"referenceName": "bentalebAzureBlobStorage",
+						"type": "LinkedServiceReference"
 					},
 					"name": "datedimcsvCleaned"
 				},
 				{
-					"dataset": {
-						"referenceName": "regiondimcsvCleaned",
-						"type": "DatasetReference"
+					"linkedService": {
+						"referenceName": "bentalebAzureBlobStorage",
+						"type": "LinkedServiceReference"
 					},
 					"name": "regiondimcsvCleaned"
 				}
@@ -79,19 +79,40 @@
 				"     ignoreNoFilesFound: false) ~> regiondimcsv",
 				"weathermetricscsv sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     emptyLinesAsHeader: 1,",
+				"     format: 'delimited',",
+				"     container: 'bentalebdatafiles',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: false,",
+				"     partitionFileNames:['weathermetricscsvCLeaned'],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> weathermetricscsvCleaned",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> weathermetricscsvCleaned",
 				"datedimcsv sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     emptyLinesAsHeader: 1,",
+				"     format: 'delimited',",
+				"     container: 'bentalebdatafiles',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: false,",
+				"     partitionFileNames:['datedimcsvCleaned'],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> datedimcsvCleaned",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> datedimcsvCleaned",
 				"regiondimcsv sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     emptyLinesAsHeader: 1,",
+				"     format: 'delimited',",
+				"     container: 'bentalebdatafiles',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: false,",
+				"     partitionFileNames:['regiondimcsvCleaned'],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> regiondimcsvCleaned"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> regiondimcsvCleaned"
 			]
 		}
 	}
