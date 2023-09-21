@@ -1,0 +1,19 @@
+{
+	"name": "datedim",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "bentalebconnsynapse",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "dedicatedpool"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "datedim"
+		}
+	}
+}

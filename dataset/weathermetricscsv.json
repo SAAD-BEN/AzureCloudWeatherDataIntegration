@@ -2,7 +2,7 @@
 	"name": "weathermetricscsv",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "bentalebAzureBlobStorage",
+			"referenceName": "datedimcsv",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
@@ -14,7 +14,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "weathermetrics.csv",
-				"container": "bentalebdatafiles"
+				"container": "bentalebstorage"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

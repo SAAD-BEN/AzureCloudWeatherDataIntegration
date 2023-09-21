@@ -1,5 +1,5 @@
 {
-	"name": "usingSQLDatabase",
+	"name": "usingDedicatedPool",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -28,28 +28,33 @@
 			],
 			"sinks": [
 				{
-					"linkedService": {
-						"referenceName": "bentalebLinkedDB",
-						"type": "LinkedServiceReference"
+					"dataset": {
+						"referenceName": "factweathermetrics",
+						"type": "DatasetReference"
 					},
 					"name": "weathermetricscsvCleaned"
 				},
 				{
-					"linkedService": {
-						"referenceName": "bentalebLinkedDB",
-						"type": "LinkedServiceReference"
+					"dataset": {
+						"referenceName": "datedim",
+						"type": "DatasetReference"
 					},
 					"name": "datedimcsvCleaned"
 				},
 				{
-					"linkedService": {
-						"referenceName": "bentalebLinkedDB",
-						"type": "LinkedServiceReference"
+					"dataset": {
+						"referenceName": "regiondim",
+						"type": "DatasetReference"
 					},
 					"name": "regiondimcsvCleaned"
 				}
 			],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "SCD1RegDim",
+					"description": "Adding SCD Rule 1 for dimRegion to update old data."
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          DateID as integer,",
@@ -77,47 +82,60 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> regiondimcsv",
+				"regiondimcsv alterRow() ~> SCD1RegDim",
 				"weathermetricscsv sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['DateID','RegionID'],",
 				"     format: 'table',",
-				"     store: 'sqlserver',",
-				"     schemaName: 'dbo',",
-				"     tableName: 'factweathermetrics',",
-				"     insertable: true,",
-				"     updateable: false,",
-				"     deletable: false,",
-				"     upsertable: false,",
+				"     staged: true,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 3,",
 				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          DateID,",
+				"          RegionID,",
+				"          AverageTemperature,",
+				"          Humidity,",
+				"          WindSpeed,",
+				"          Rainfall,",
+				"          SunshineHours",
+				"     ),",
 				"     partitionBy('hash', 1)) ~> weathermetricscsvCleaned",
 				"datedimcsv sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
 				"     format: 'table',",
-				"     store: 'sqlserver',",
-				"     schemaName: 'dbo',",
-				"     tableName: 'datedim',",
-				"     insertable: true,",
-				"     updateable: false,",
-				"     deletable: false,",
-				"     upsertable: false,",
+				"     staged: true,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
 				"     errorHandlingOption: 'stopOnFirstError',",
 				"     partitionBy('hash', 1)) ~> datedimcsvCleaned",
-				"regiondimcsv sink(allowSchemaDrift: true,",
+				"SCD1RegDim sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:true,",
+				"     upsertable:true,",
+				"     keys:['RegionID'],",
 				"     format: 'table',",
-				"     store: 'sqlserver',",
-				"     schemaName: 'dbo',",
-				"     tableName: 'regiondim',",
-				"     insertable: true,",
-				"     updateable: false,",
-				"     deletable: false,",
-				"     upsertable: false,",
+				"     staged: true,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 2,",
 				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          RegionID,",
+				"          RegionName",
+				"     ),",
 				"     partitionBy('hash', 1)) ~> regiondimcsvCleaned"
 			]
 		}

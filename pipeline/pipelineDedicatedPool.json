@@ -1,9 +1,9 @@
 {
-	"name": "pipelineSQLDB",
+	"name": "pipelineDedicatedPool",
 	"properties": {
 		"activities": [
 			{
-				"name": "dataflow1",
+				"name": "usingDedicatedPool",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,8 +16,15 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "usingSQLDatabase",
+						"referenceName": "usingDedicatedPool",
 						"type": "DataFlowReference"
+					},
+					"staging": {
+						"linkedService": {
+							"referenceName": "datedimcsv",
+							"type": "LinkedServiceReference"
+						},
+						"folderPath": "bentalebstorage"
 					},
 					"compute": {
 						"coreCount": 8,
@@ -27,8 +34,6 @@
 				}
 			}
 		],
-		"annotations": [],
-		"lastPublishTime": "2023-09-19T14:16:07Z"
-	},
-	"type": "Microsoft.DataFactory/factories/pipelines"
+		"annotations": []
+	}
 }
